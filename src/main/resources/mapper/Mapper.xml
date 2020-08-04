@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhangkaipeng.mapper.ApplicantMapper">
+	<select id="queryApplicant" parameterType="map" resultType="com.zhangkaipeng.bean.Applicant">
+		SELECT a.*,GROUP_CONCAT(j.jname,s.score,'分')AS score ,AVG(s.score) AS avgscore FROM cctv_applicant a
+		LEFT JOIN cctv_score s ON a.aid=s.aid
+		LEFT JOIN cctv_job j ON s.jid=j.jid
+		GROUP BY a.aid
+	</select>
+	
+	<select id="queryJobAll" resultType="com.zhangkaipeng.bean.Job">
+		select * from cctv_Job
+	</select>
+	
+	<select id="addApplicant" parameterType="com.zhangkaipeng.bean.Applicant">
+		insert into cctv_applicant
+		(aname,gender,birthday,college,major,edu,degree,created)
+		values
+		(#{aname},#{gender},#{birthday},#{college},#{major},#{edu},#{degree},now())
+	</select>
+</mapper>
